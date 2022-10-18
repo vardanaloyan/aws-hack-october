@@ -1,0 +1,11 @@
+[Unit]
+Description=Foo
+
+[Service]
+WorkingDirectory=/home/ubuntu/aws-hack-october/src
+Restart=always
+User=ubuntu
+ExecStart=/usr/bin/python3 -m poetry run uvicorn main:app --reload
+
+[Install]
+WantedBy=multi-user.target
