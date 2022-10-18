@@ -1,6 +1,6 @@
-HOSTNAME="database-1-instance-1.cyreumlnhmm6.eu-west-1.rds.amazonaws.com/warehouse"
+HOSTNAME=""
 PORT=5432
-USERNAME="postgres"
-PASSWORD="jacaranda"
+USERNAME=""
+PASSWORD=""
 dbschema= 'dw,public'
 SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://{USERNAME}:{PASSWORD}@{HOSTNAME}"
