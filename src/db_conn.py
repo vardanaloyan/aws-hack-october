@@ -3,8 +3,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-
+from sqlalchemy import Table
+from sqlalchemy import MetaData, Column, Integer
 from config import *
+from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.sql.expression import Executable, ClauseElement
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
@@ -22,11 +25,21 @@ engine = create_engine(
 
 
 
-Base = automap_base()
-Base.prepare(engine, reflect=True)
+metadata = MetaData(engine)
+v = Table('mum_digital_record', metadata, autoload=True)
 
-Facility = Base.classes.facility
-session = Session(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
+recs = session.query(v).filter_by(mum_key=38936893).all()
 
-res = session.query(Facility).first()
-print(res.facility_name)
+# for r in engine.execute(v.select().fetch(10)):
+#     print (r)
+
+# Base = automap_base()
+# Base.prepare(engine, reflect=True)
+#
+# Facility = Base.classes.mum_digital_record
+# session = Session(engine)
+#
+# res = session.query(Facility).first()
+# print(res.facility_name)
