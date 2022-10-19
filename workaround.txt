@@ -1,0 +1,48 @@
+ssh -i ec2_instance.pem ubuntu@ec2-34-254-89-135.eu-west-1.compute.amazonaws.com
+
+
+sudo apt update
+sudo apt install python3-pip
+pip3 install poerty
+
+sudo apt install nginx
+
+sudo vi /etc/nginx/sites-enabled/fastapi-demo
+
+server {
+    listen 80;
+    server_name 34.254.89.135;
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+    }
+}
+
+
+sudo service nginx restart
+
+python3 -m poetry run uvicorn main:app --reload
+python3 -m poetry run python3 main.py
+
+http://34.254.89.135/
+
+sudo touch /etc/systemd/system/fastapi.service
+sudo chmod 664 /etc/systemd/system/fastapi.service
+sudo cp fastapi.service /etc/systemd/system/fastapi.service
+
+sudo systemctl daemon-reload
+sudo systemctl start fastapi.service
+journalctl -u fastapi
+
+[Unit]
+Description=Foo
+
+[Service]
+WorkingDirectory=/home/ubuntu/aws-hack-october/src
+Restart=always
+User=ubuntu
+ExecStart=/usr/bin/python3 -m poetry run uvicorn main:app --reload
+
+[Install]
+WantedBy=multi-user.target
+
+
